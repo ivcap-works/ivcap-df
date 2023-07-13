@@ -6,13 +6,23 @@ GIT_TAG := $(shell git describe --abbrev=0 --tags ${GIT_COMMIT} 2>/dev/null || t
 
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
-build:
+build: add-license
 	poetry build
 
 test:
-	pytest ${ROOT_DIR}/tests/
+	poetry run pytest tests/ --cov=ivcap_df --cov-report=xml
+
+docs:
+	rm -rf ${ROOT_DIR}/docs/_build
+	cd ${ROOT_DIR}/docs && make html
+
+add-license:
+	licenseheaders -t .license.tmpl -y 2023 -d src
+	licenseheaders -t .license.tmpl -y 2023 -d examples
 
 clean:
 	rm -rf *.egg-info
 	rm -rf dist
 	find ${ROOT_DIR} -name __pycache__ | xargs rm -r 
+
+.PHONY: docs

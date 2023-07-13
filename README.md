@@ -1,4 +1,6 @@
-# A Python Library for interacting with the IVCAP Data Fabric
+# ivcap-df
+
+A Python Library for interacting with the IVCAP Data Fabric
 
 ## Defining Schemas
 
