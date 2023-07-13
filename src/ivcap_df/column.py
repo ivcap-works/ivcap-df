@@ -1,3 +1,8 @@
+#
+# Copyright (c) 2023 Commonwealth Scientific and Industrial Research Organisation (CSIRO). All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file. See the AUTHORS file for names of contributors.
+#
 from __future__ import annotations # postpone evaluation of annotations 
 from enum import Enum, unique
 from dataclasses import dataclass
@@ -24,7 +29,7 @@ class ColType(Enum):
     FLOAT16 = 'float16'
     FLOAT32 = 'float32'
     FLOAT64 = 'float64'
-    FLOAT128 = 'float128'
+    # FLOAT128 = 'float128'
     INT8 = 'int8'
     INT16 = 'int16'
     INT32 = 'int32'
@@ -47,7 +52,7 @@ JsonSchemaType = {
     ColType.FLOAT16: lambda c: {"type": "number" },
     ColType.FLOAT32: lambda c: {"type": "number" },
     ColType.FLOAT64: lambda c: {"type": "number" },
-    ColType.FLOAT128: lambda c: {"type": "number" },
+    # ColType.FLOAT128: lambda c: {"type": "number" },
     ColType.INT8: lambda c: {"type": "integer" },
     ColType.INT16: lambda c: {"type": "integer" },
     ColType.INT32: lambda c: {"type": "integer" },
@@ -83,7 +88,7 @@ seriesValidator = {
     ColType.FLOAT16: lambda s: s.dtype == np.float16 or s.dtype.name == 'float16',
     ColType.FLOAT32: lambda s: s.dtype == np.float32 or s.dtype.name == 'float32',
     ColType.FLOAT64: lambda s: s.dtype == np.float64 or s.dtype.name == 'float64',
-    ColType.FLOAT128: lambda s: s.dtype == np.float128 or s.dtype.name == 'float128',
+    # ColType.FLOAT128: lambda s: s.dtype == np.float128 or s.dtype.name == 'float128',
     ColType.INT8: lambda s: s.dtype == np.int8 or s.dtype == pd.Int8Dtype(),
     ColType.INT16: lambda s: s.dtype == np.int16 or s.dtype == pd.Int16Dtype(),
     ColType.INT32: lambda s: s.dtype == np.int32 or s.dtype == pd.Int32Dtype(),
@@ -104,7 +109,7 @@ pandaTypes = {
     ColType.FLOAT16: np.dtype('f2'),
     ColType.FLOAT32: np.dtype('f4'),
     ColType.FLOAT64: np.dtype('f8'),
-    ColType.FLOAT128: np.dtype('f16'),
+    # ColType.FLOAT128: np.dtype('f16'),
     ColType.INT8: np.dtype('i1'),
     ColType.INT16: np.dtype('i2'),
     ColType.INT32: np.dtype('i4'),
@@ -118,28 +123,6 @@ pandaTypes = {
     ColType.BOOLEAN: np.dtype('?'),
 }
 
-# TODO: Move to db_access.py
-# sqlType = {
-#     ColType.REC_ID: 'UUID',    
-#     ColType.UUID: 'UUID',
-#     ColType.REF: 'UUID',
-#     ColType.FLOAT16: 'real',
-#     ColType.FLOAT32: 'real',
-#     ColType.FLOAT64: 'double precision',
-#     ColType.FLOAT128: 'double precision', # Most likely not supported
-#     ColType.INT8: 'smallint',
-#     ColType.INT16: 'smallint',
-#     ColType.INT32: 'integer',
-#     ColType.INT64: 'bigint',
-#     ColType.UINT8: 'smallint',
-#     ColType.UINT16: 'smallint',
-#     ColType.UINT32: 'integer',
-#     ColType.UINT64: 'bigint',
-#     ColType.DATETIME64_NS_TZ: 'timestamptz',
-#     ColType.STRING: 'text',
-#     ColType.BOOLEAN: 'boolean',
-# }
-   
     
 @dataclass(frozen=True)
 class Column:
