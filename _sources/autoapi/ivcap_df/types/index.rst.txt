@@ -1,0 +1,17 @@
+:py:mod:`ivcap_df.types`
+========================
+
+.. py:module:: ivcap_df.types
+
+
+Module Contents
+---------------
+
+.. py:exception:: NotAuthorizedException
+
+
+   Bases: :py:obj:`BaseException`
+
+   Common base class for all exceptions
+
+

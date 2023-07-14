@@ -1,0 +1,178 @@
+:py:mod:`ivcap_df.dataSet`
+==========================
+
+.. py:module:: ivcap_df.dataSet
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ivcap_df.dataSet.DataItem
+   ivcap_df.dataSet.DataSet
+
+
+
+
+.. py:class:: DataItem(id: str, data: Sequence[Any], schema: ivcap_df.schema.Schema)
+
+
+   .. py:attribute:: id
+      :type: str
+
+      
+
+   .. py:attribute:: schema
+      :type: ivcap_df.schema.Schema
+
+      
+
+   .. py:attribute:: _data
+      :type: Sequence[Any]
+
+      
+
+   .. py:method:: graph_many(*seedItems: Sequence[DataItem], depth=99, digraph: Optional[graphviz.Digraph] = None, fontSize=12, verbose=False) -> graphviz.Digraph
+      :classmethod:
+
+      Return a Graphviz Digraph showing the dependency graph for items in `*seedItems`.
+
+      :param depth: Number of levels to expand to. Defaults to 99.
+      :type depth: int, optional
+      :param digraph: Digraph object. If set to None, one is being created. Defaults to None.
+      :type digraph: Optional[Digraph], optional
+      :param fontSize: Font size for node and edge label if digraph is created internally . Defaults to 12.
+      :type fontSize: int, optional
+      :param verbose: If set report on items visited. Defaults to False.
+      :type verbose: bool, optional
+
+      :returns: The digraph nodes and edges have been added
+      :rtype: Digraph
+
+
+   .. py:method:: prop(name: str) -> Any
+
+
+   .. py:method:: props() -> Sequence[Tuple[str, Any, ivcap_df.column.ColType]]
+
+      Return a sequence of tuples (propName, propValue, colType) one for each property
+
+      :returns: A sequence of tuples (propName, propValue, colType)
+      :rtype: Sequence[Tuple[str, Any, ColType]]
+
+
+   .. py:method:: graph(depth=99, digraph: Optional[graphviz.Digraph] = None, fontSize=12, verbose=False) -> graphviz.Digraph
+
+      Return a Graphviz Digraph showing the dependency graph for this item.
+
+      :param depth: Number of levels to expand to. Defaults to 99.
+      :type depth: int, optional
+      :param digraph: Digraph object. If set to None, one is being created. Defaults to None.
+      :type digraph: Optional[Digraph], optional
+      :param fontSize: Font size for node and edge label if digraph is created internally . Defaults to 12.
+      :type fontSize: int, optional
+      :param verbose: If set report on items visited. Defaults to False.
+      :type verbose: bool, optional
+
+      :returns: The digraph nodes and edges have been added
+      :rtype: Digraph
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+   .. py:method:: __hash__()
+
+      Return hash(self).
+
+
+
+.. py:class:: DataSet(schema: ivcap_df.schema.Schema, labelF: Optional[Callable[[Dict[str, Any]], str]] = None, dataFrame: pandas.DataFrame = None)
+
+
+   .. py:attribute:: schema
+      :type: ivcap_df.schema.Schema
+
+      
+
+   .. py:attribute:: items
+      :type: Dict[str, DataItem]
+
+      
+
+   .. py:attribute:: df
+      :type: pandas.DataFrame
+
+      
+
+   .. py:method:: add(**kwargs) -> DataItem
+
+
+   .. py:method:: add_df(df: pandas.DataFrame) -> Dict[str, DataItem]
+
+
+   .. py:method:: add_data_items(items: pandas.Series[DataItem])
+
+
+   .. py:method:: query_one(query: str, local_dict: Dict[str, Any] = {}, failQuietly=False) -> DataItem
+
+      Try to find a single data item which is returned by `query`.
+
+      :param query: Query string as defined by panda's DataFrame#query.
+      :type query: str
+      :param local_dict: Optionally maps '@' variables in `query` to values. Defaults to {}.
+      :type local_dict: Dict[str, Any], optional
+      :param failQuietly: If nothing found and set to true return None, otherwise raise exception. Defaults to False.
+      :type failQuietly: bool, optional
+
+      :raises Exception: If none or multiple entities are found and 'failQuietly' is set to False
+
+      :returns: DataItem found as result of query
+      :rtype: DataItem
+
+
+   .. py:method:: query(query: str, local_dict: Dict[str, Any] = {}) -> Sequence[DataItem]
+
+      Returns a sequence pf DataItems which fulfill `query`.
+
+      :param query: Query string as defined by panda's DataFrame#query
+      :type query: str
+      :param local_dict: Optionally maps '@' variables in `query` to values. Defaults to {}.
+      :type local_dict: Dict[str, Any], optional
+
+      :returns: Sequence of data items contained in this set
+      :rtype: Sequence[DataItem]
+
+
+   .. py:method:: isempty()
+
+
+   .. py:method:: graph(depth=99, digraph: Optional[graphviz.Digraph] = None, fontSize=12, verbose=False) -> graphviz.Digraph
+
+      Return a Graphviz Digraph showing the dependency graph for all items in this set.
+
+      :param depth: Number of levels to expand to. Defaults to 99.
+      :type depth: int, optional
+      :param digraph: Digraph object. If set to None, one is being created. Defaults to None.
+      :type digraph: Optional[Digraph], optional
+      :param fontSize: Font size for node and edge label if digraph is created internally . Defaults to 12.
+      :type fontSize: int, optional
+      :param verbose: If set report on items visited. Defaults to False.
+      :type verbose: bool, optional
+
+      :returns: The digraph nodes and edges have been added
+      :rtype: Digraph
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+

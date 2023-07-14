@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ivcap-df &mdash; ivcap_df  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Contributing" href="contributing.html" />
+    <link rel="prev" title="ivcap-df" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            ivcap_df
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#defining-schemas">Defining Schemas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#loading-data">Loading Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="conduct.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ivcap_df</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">ivcap-df</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/overview.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ivcap-df">
+<h1>ivcap-df<a class="headerlink" href="#ivcap-df" title="Permalink to this heading"></a></h1>
+<p>A Python Library for interacting with the IVCAP Data Fabric</p>
+<section id="defining-schemas">
+<h2>Defining Schemas<a class="headerlink" href="#defining-schemas" title="Permalink to this heading"></a></h2>
+<p><strong>I need to define a much simpler example. Maybe along the lines of the classical Elementary School
+experiment of growing grass seeds with different amount of water added every so often -
+with maybe an imge taken as well for every observation</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ivcap_df</span> <span class="kn">import</span> <span class="n">Schema</span><span class="p">,</span> <span class="n">IdColumn</span><span class="p">,</span> <span class="n">RefColumn</span><span class="p">,</span> <span class="n">Column</span><span class="p">,</span> <span class="n">ColType</span><span class="p">,</span> <span class="n">Connector</span>
+
+<span class="n">common_ns</span> <span class="o">=</span> <span class="s1">&#39;common&#39;</span>
+<span class="n">geo_location_s</span> <span class="o">=</span> <span class="n">Schema</span><span class="p">(</span><span class="s1">&#39;geo_location&#39;</span><span class="p">,</span> <span class="n">common_ns</span><span class="p">,</span> <span class="s1">&#39;The geographic coordinates of a place or event&#39;</span><span class="p">,</span> <span class="p">[</span>
+    <span class="n">Column</span><span class="p">(</span><span class="s1">&#39;elevation&#39;</span><span class="p">,</span> <span class="n">ColType</span><span class="o">.</span><span class="n">FLOAT64</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The elevation of a location (WGS 84). Value alone should be assumed to be in meters.&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">Column</span><span class="p">(</span><span class="s1">&#39;latitude&#39;</span><span class="p">,</span> <span class="n">ColType</span><span class="o">.</span><span class="n">FLOAT64</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The latitude of a location. For example 37.42242 (WGS 84).&quot;</span><span class="p">),</span>
+    <span class="n">Column</span><span class="p">(</span><span class="s1">&#39;longitude&#39;</span><span class="p">,</span> <span class="n">ColType</span><span class="o">.</span><span class="n">FLOAT64</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The longitude of a location. For example -122.08585 (WGS 84).&quot;</span><span class="p">),</span>
+<span class="p">])</span>
+
+<span class="n">geo_line_s</span> <span class="o">=</span> <span class="n">Schema</span><span class="p">(</span><span class="s1">&#39;geo_line&#39;</span><span class="p">,</span> <span class="n">common_ns</span><span class="p">,</span> <span class="s1">&#39;The geographic coordinates of a line defined by a from and to locations&#39;</span><span class="p">,</span> <span class="p">[</span>
+    <span class="n">RefColumn</span><span class="p">(</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="n">geo_location_s</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Location of the beginning of the line&#39;</span><span class="p">),</span> 
+    <span class="n">RefColumn</span><span class="p">(</span><span class="s1">&#39;to&#39;</span><span class="p">,</span> <span class="n">geo_location_s</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Location of the end of the line&#39;</span><span class="p">),</span> 
+<span class="p">])</span>
+
+<span class="n">image_s</span> <span class="o">=</span> <span class="n">Schema</span><span class="p">(</span><span class="s1">&#39;image&#39;</span><span class="p">,</span> <span class="n">common_ns</span><span class="p">,</span> <span class="s1">&#39;An image&#39;</span><span class="p">,</span>  <span class="p">[</span>
+    <span class="n">Column</span><span class="p">(</span><span class="s1">&#39;url&#39;</span><span class="p">,</span> <span class="n">ColType</span><span class="o">.</span><span class="n">STRING</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;uri&#39;</span><span class="p">),</span>
+    <span class="n">Column</span><span class="p">(</span><span class="s1">&#39;description&#39;</span><span class="p">,</span> <span class="n">ColType</span><span class="o">.</span><span class="n">STRING</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">Column</span><span class="p">(</span><span class="s1">&#39;format&#39;</span><span class="p">,</span> <span class="n">ColType</span><span class="o">.</span><span class="n">STRING</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">Column</span><span class="p">(</span><span class="s1">&#39;width&#39;</span><span class="p">,</span> <span class="n">ColType</span><span class="o">.</span><span class="n">INT64</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Image width in pixels&quot;</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;pixel&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">Column</span><span class="p">(</span><span class="s1">&#39;height&#39;</span><span class="p">,</span> <span class="n">ColType</span><span class="o">.</span><span class="n">INT64</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Image height in pixels&quot;</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;pixel&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">Column</span><span class="p">(</span><span class="s1">&#39;dateTime&#39;</span><span class="p">,</span> <span class="n">ColType</span><span class="o">.</span><span class="n">STRING</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;The date and time this image was taken (in ISO 8601 date format).&#39;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;date-time&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">RefColumn</span><span class="p">(</span><span class="s1">&#39;location&#39;</span><span class="p">,</span> <span class="n">geo_location_s</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> 
+<span class="p">])</span>
+
+</pre></div>
+</div>
+<p>To visualise the schema relationships, execute the following in a Jupyter Notebook:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">schemas</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;geo_location_s&#39;</span><span class="p">:</span> <span class="n">geo_location_s</span><span class="p">,</span>
+    <span class="s1">&#39;geo_line_s&#39;</span><span class="p">:</span> <span class="n">geo_line_s</span><span class="p">,</span>
+    <span class="s1">&#39;image&#39;</span><span class="p">:</span> <span class="n">image_s</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">Schema</span><span class="o">.</span><span class="n">to_dot</span><span class="p">(</span><span class="n">schemas</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">fontSize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><img src="docs/images/simple-schema.png" width="500"></a></p>
+<p>To persist the schema definition to IVCAP, run the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ivcap_prov</span> <span class="kn">import</span> <span class="n">Connector</span>
+
+<span class="n">ivcap_params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;ivcap&quot;</span><span class="p">,</span>  <span class="o">...</span><span class="p">}</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">Connector</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="o">**</span><span class="n">ivcap_params</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">schema</span> <span class="ow">in</span> <span class="n">schemas</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">schema</span><span class="o">.</span><span class="n">persist</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;...schema done&quot;</span><span class="p">)</span>
+
+<span class="n">db</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="loading-data">
+<h2>Loading Data<a class="headerlink" href="#loading-data" title="Permalink to this heading"></a></h2>
+<p>First we will need to load the respective schemas:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ivcap_prov</span> <span class="kn">import</span> <span class="n">Connector</span><span class="p">,</span><span class="n">Schema</span>
+
+<span class="n">bg_ns</span> <span class="o">=</span> <span class="s1">&#39;blue_growth&#39;</span>
+<span class="n">ivcap_ns</span> <span class="o">=</span> <span class="s1">&#39;ivcap&#39;</span>
+
+<span class="n">db</span> <span class="o">=</span> <span class="n">Connector</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="o">**</span><span class="n">ivcap_params</span><span class="p">)</span>
+<span class="n">qimage_s</span> <span class="o">=</span> <span class="n">Schema</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="s1">&#39;quadrat_image&#39;</span><span class="p">,</span> <span class="n">bg_ns</span><span class="p">)</span>
+<span class="n">image_artifact_s</span> <span class="o">=</span> <span class="n">Schema</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="s1">&#39;image_artifact&#39;</span><span class="p">,</span> <span class="n">ivcap_ns</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="ivcap-df" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="contributing.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, CSIRO.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

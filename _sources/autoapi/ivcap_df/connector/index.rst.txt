@@ -1,0 +1,131 @@
+:py:mod:`ivcap_df.connector`
+============================
+
+.. py:module:: ivcap_df.connector
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ivcap_df.connector.Connector
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ivcap_df.connector._create_ivcap_connector
+   ivcap_df.connector._create_cozo_connector
+   ivcap_df.connector._create_db_connector
+   ivcap_df.connector.create_connector
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   ivcap_df.connector.type2klass
+
+
+.. py:function:: _create_ivcap_connector(**kwargs)
+
+
+.. py:function:: _create_cozo_connector(**kwargs)
+
+
+.. py:function:: _create_db_connector(**kwargs)
+
+
+.. py:data:: type2klass
+
+   
+
+.. py:class:: Connector
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+   .. py:method:: close()
+      :abstractmethod:
+
+
+   .. py:method:: insert_data_frame(df: pandas.DataFrame, schema: ivcap_df.schema.Schema, ignoreDuplicateRecords=True)
+      :abstractmethod:
+
+      Insert content of 'df' into table represented by 'schema'. If 'ignoreDuplicateRecords'
+      is set, quietly drop any records in 'df' which have an identical 'record-id' to what is already
+      stored in the table.
+
+
+   .. py:method:: get_all_for_schema(schema: ivcap_df.schema.Schema) -> pandas.DataFrame
+      :abstractmethod:
+
+      Get all accessible entities of type `Schema`.
+
+      This query is primarily used for schemas representing 'controlled vocabulary'.
+
+      :param schema: Schema of elements queried.
+      :type schema: Schema
+
+      :returns: A dataframe holding all accessible entities
+      :rtype: pd.DataFrame
+
+
+   .. py:method:: query_to_df(query: str) -> pandas.DataFrame
+      :abstractmethod:
+
+      Execute 'query' (connector specific) and return result as dataframe.
+
+
+   .. py:method:: register_schema(schema: ivcap_df.schema.Schema, failQuietly=False, verbose=False)
+      :abstractmethod:
+
+      Register the 'schema' in the metadata registry.
+
+
+   .. py:method:: get_schema(name: str, verbose=False) -> ivcap_df.schema.Schema
+      :abstractmethod:
+
+
+   .. py:method:: get_all_schemas_for_namespace(name: str, verbose=False) -> Sequence[ivcap_df.schema.Schema]
+      :abstractmethod:
+
+
+   .. py:method:: upload_artifact(*, name: Optional[str] = None, file_path: Optional[str] = None, io_stream: Optional[IO] = None, content_type: Optional[str] = None, content_size: Optional[int] = -1, chunk_size: Optional[int] = MAXSIZE, retries: Optional[int] = 0, retry_delay: Optional[int] = 30) -> ivcap_client.Artifact
+      :abstractmethod:
+
+      Uploads content which is either identified as a `file_path` or `io_stream`. In the
+      latter case, content type need to be provided.
+
+      :param file_path: File to upload
+      :type file_path: Optional[str]
+      :param io_stream: Content as IO stream.
+      :type io_stream: Optional[IO]
+      :param content_type: Content type - needs to be declared for `io_stream`.
+      :type content_type: Optional[str]
+      :param content_size: Overall size of content to be uploaded. Defaults to -1 (don't know).
+      :type content_size: Optional[int]
+      :param chunk_size: Chunk size to use for each individual upload. Defaults to MAXSIZE.
+      :type chunk_size: Optional[int]
+      :param retries: The number of attempts should be made in the case of a failed upload. Defaults to 0.
+      :type retries: Optional[int]
+      :param retry_delay: How long (in seconds) should we wait before retrying a failed upload attempt. Defaults to 30.
+      :type retry_delay: Optional[int], optional
+
+
+
+.. py:function:: create_connector(**kwargs) -> Connector
+
+

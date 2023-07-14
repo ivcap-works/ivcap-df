@@ -1,0 +1,377 @@
+:py:mod:`ivcap_df.column`
+=========================
+
+.. py:module:: ivcap_df.column
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ivcap_df.column.ColType
+   ivcap_df.column.Column
+   ivcap_df.column.IdColumn
+   ivcap_df.column.RefColumn
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ivcap_df.column.validate_uuid
+   ivcap_df.column.validate_urn
+   ivcap_df.column.create_uuid
+   ivcap_df.column.safe_sql_name
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   ivcap_df.column.NAMESPACE_IVCAP
+   ivcap_df.column.ENTITY_COL_NAME
+   ivcap_df.column.ANY_SCHEMA
+   ivcap_df.column.JsonSchemaType
+   ivcap_df.column.uuid_re
+   ivcap_df.column.seriesValidator
+   ivcap_df.column.pandaTypes
+
+
+.. py:data:: NAMESPACE_IVCAP
+
+   
+
+.. py:data:: ENTITY_COL_NAME
+   :value: '_id'
+
+   
+
+.. py:data:: ANY_SCHEMA
+   :value: 'urn:ivcap:schema:any.1'
+
+   
+
+.. py:class:: ColType
+
+
+   Bases: :py:obj:`enum.Enum`
+
+   Generic enumeration.
+
+   Derive from this class to define new enumerations.
+
+   .. py:attribute:: ENTITY
+      :value: 'entity'
+
+      
+
+   .. py:attribute:: UUID
+      :value: 'uuid'
+
+      
+
+   .. py:attribute:: REF
+      :value: 'ref'
+
+      
+
+   .. py:attribute:: FLOAT16
+      :value: 'float16'
+
+      
+
+   .. py:attribute:: FLOAT32
+      :value: 'float32'
+
+      
+
+   .. py:attribute:: FLOAT64
+      :value: 'float64'
+
+      
+
+   .. py:attribute:: INT8
+      :value: 'int8'
+
+      
+
+   .. py:attribute:: INT16
+      :value: 'int16'
+
+      
+
+   .. py:attribute:: INT32
+      :value: 'int32'
+
+      
+
+   .. py:attribute:: INT64
+      :value: 'int64'
+
+      
+
+   .. py:attribute:: UINT8
+      :value: 'uint8'
+
+      
+
+   .. py:attribute:: UINT16
+      :value: 'uint16'
+
+      
+
+   .. py:attribute:: UINT32
+      :value: 'uint32'
+
+      
+
+   .. py:attribute:: UINT64
+      :value: 'uint64'
+
+      
+
+   .. py:attribute:: DATETIME64_NS_TZ
+      :value: 'datetime_tz'
+
+      
+
+   .. py:attribute:: DATE
+      :value: 'date'
+
+      
+
+   .. py:attribute:: STRING
+      :value: 'string'
+
+      
+
+   .. py:attribute:: BOOLEAN
+      :value: 'boolean'
+
+      
+
+
+.. py:data:: JsonSchemaType
+
+   
+
+.. py:data:: uuid_re
+
+   
+
+.. py:function:: validate_uuid(e) -> bool
+
+
+.. py:function:: validate_urn(e) -> bool
+
+
+.. py:data:: seriesValidator
+
+   
+
+.. py:data:: pandaTypes
+
+   
+
+.. py:class:: Column(name: str, ctype: ColType, **kwargs)
+
+
+   Defines the name and type of a schema column.
+
+   .. py:attribute:: name
+      :type: str
+
+      
+
+   .. py:attribute:: ctype
+      :type: ColType
+
+      
+
+   .. py:attribute:: description
+      :type: str
+
+      
+
+   .. py:attribute:: default
+      :type: Any
+
+      
+
+   .. py:attribute:: required
+      :type: bool
+
+      
+
+   .. py:method:: from_dict(name: str, definition: Dict[str, Any], required=True) -> Column
+      :classmethod:
+
+
+   .. py:method:: is_nullable() -> bool
+
+
+   .. py:method:: def_value()
+
+
+   .. py:method:: is_valid(series: pandas.Series) -> bool
+
+      Check if pandas 'series'is approriate for this column's defined 'ctype'
+
+
+   .. py:method:: is_equal(other: Column) -> bool
+
+
+   .. py:method:: to_json_schema()
+
+
+   .. py:method:: hash_value(v: Any) -> str
+
+      Returns a string representation of 'v' for use in entity hash
+
+      :param v: column value
+      :type v: Any
+
+      :returns: A string to be used in creating an entity ID
+      :rtype: str
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+.. py:class:: IdColumn
+
+
+   Bases: :py:obj:`Column`
+
+   Defines the name and type of a schema column.
+
+   .. py:method:: is_nullable()
+
+
+   .. py:method:: is_equal(other: Column) -> bool
+
+
+   .. py:method:: to_json_schema()
+
+
+   .. py:method:: get_urn_for(ref: str) -> str
+
+      Returns the urn of the reference 'ref' assuming to be a value of this column type.
+
+      :param v: column value
+      :type v: Any
+
+      :returns: The URN of referenced entity
+      :rtype: str
+
+
+   .. py:method:: hash_value(v: Any) -> str
+
+      Returns a string representation of 'v' for use in entity hash
+
+      :param v: column value
+      :type v: Any
+
+      :returns: An empty string as the IdColumn should not be part of the entity hash
+      :rtype: str
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+.. py:class:: RefColumn(name: str, schema_or_urn: Optional[Union[ivcap_df.schema.Schema, str]] = ANY_SCHEMA, **kwargs)
+
+
+   Bases: :py:obj:`Column`
+
+   Defines the name and type of a schema column.
+
+   .. py:attribute:: _schema
+      :type: Schema
+
+      
+
+   .. py:attribute:: urn
+      :type: str
+
+      
+
+   .. py:method:: from_dict(name: str, definition: Dict[str, Any], required=True) -> RefColumn
+      :classmethod:
+
+
+   .. py:method:: is_equal(other: Column) -> bool
+
+
+   .. py:method:: schema_name() -> str
+
+
+   .. py:method:: schema(connector: ivcap_df.connector.Connector = None) -> Schema
+
+
+   .. py:method:: dataset(connector: ivcap_df.connector.Connector = None) -> DataSet
+
+      Return all entities found for the references schema as a DataSet
+
+      :param connector: Connector to retrieve data from. Defaults to None.
+      :type connector: Connector, optional
+
+      :raises Exception: _description_
+
+      :returns: A dataset containing all elements found for the referenced schema
+      :rtype: DataSet
+
+
+   .. py:method:: to_json_schema()
+
+
+   .. py:method:: get_urn_for(ref: Union[DataSet, str]) -> str
+
+      Returns the urn of the reference 'ref' assuming to be a value of this column type.
+
+
+
+      :param v: column value
+      :type v: Any
+
+      :returns: The URN of referenced entity
+      :rtype: str
+
+
+   .. py:method:: hash_value(v: Any) -> str
+
+      Returns a string representation of 'v' for use in entity hash
+
+      :param v: column value
+      :type v: Any
+
+      :returns: The URN of referenced entity
+      :rtype: str
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+.. py:function:: create_uuid(text) -> uuid.UUID
+
+
+.. py:function:: safe_sql_name(name)
+
+

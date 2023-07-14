@@ -1,0 +1,896 @@
+:py:mod:`ivcap_df`
+==================
+
+.. py:module:: ivcap_df
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   column/index.rst
+   connector/index.rst
+   dataSet/index.rst
+   schema/index.rst
+   types/index.rst
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ivcap_df.Schema
+   ivcap_df.Column
+   ivcap_df.IdColumn
+   ivcap_df.RefColumn
+   ivcap_df.ColType
+   ivcap_df.Connector
+   ivcap_df.DataSet
+   ivcap_df.DataItem
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ivcap_df.create_connector
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   ivcap_df.__version__
+   ivcap_df.DEF_SCHEMA
+   ivcap_df.ENTITY_COL_NAME
+
+
+.. py:data:: __version__
+
+   
+
+.. py:class:: Schema(name: str, namespace: str, description: str, columns: Sequence[ivcap_df.column.Column], version=1)
+
+
+   Defines the name columns of a schema.
+
+   .. py:property:: column_names
+      :type: List[str]
+
+      Return a list of all column names
+
+   .. py:attribute:: name
+      :type: str
+
+      
+
+   .. py:attribute:: namespace
+      :type: str
+
+      
+
+   .. py:attribute:: version
+      :type: int
+
+      
+
+   .. py:attribute:: urn
+      :type: str
+
+      
+
+   .. py:attribute:: description
+      :type: str
+
+      
+
+   .. py:attribute:: columns
+      :type: Sequence[ivcap_df.column.Column]
+
+      
+
+   .. py:attribute:: idColumn
+      :type: ivcap_df.column.Column
+
+      
+
+   .. py:attribute:: urnPrefix
+      :type: str
+
+      
+
+   .. py:attribute:: _ds
+      :type: ivcap_df.dataSet.DataSet
+
+      
+
+   .. py:method:: load(conn: ivcap_df.connector.Connector, name: str, namespace: str, version=1) -> Schema
+      :classmethod:
+
+
+   .. py:method:: from_dict(dict: Dict[str, Any]) -> Schema
+      :classmethod:
+
+
+   .. py:method:: walk(conn: ivcap_df.connector.Connector, schemas: Collection[Union[Schema, str]], verbose=False) -> pandas.DataFrame
+      :classmethod:
+
+      Starting from the schemas defined `schemaURNs` loads all schemas reachable through RefColumns
+
+      Return a dataframe with each row representing one of the discovered schemas
+
+      :param conn: Connector to query data from
+      :type conn: Connector
+      :param schemas: A list of schemas or schema URNs
+      :type schemas: Collection[Union[Schema, str]]
+      :param verbose: Be chatty
+      :type verbose: bool, optional
+
+      :returns: [name:str, namespace:str, version:int, schema:Schema]
+      :rtype: DataFrame
+
+
+   .. py:method:: create_urn(name: str, namespace: str, version=1) -> str
+      :classmethod:
+
+
+   .. py:method:: parse_urn(urn: str) -> Tuple[str, str, int]
+      :classmethod:
+
+
+   .. py:method:: urn2urn_prefix(urn: str) -> str
+      :classmethod:
+
+
+   .. py:method:: to_dot(schemas: Sequence[Schema], digraph: Optional[graphviz.Digraph] = None, fontSize=12) -> graphviz.Digraph
+      :classmethod:
+
+      Return a dot DIgraph which describes the properties of the schemas
+      and the links/references between them.
+
+      Calling this from inside Jupyter will display the graph assuming graphviz is installed
+
+      :param schemas: _description_
+      :type schemas: Sequence[Schema]
+
+      :returns: A graphiz Digraph
+      :rtype: Digraph
+
+
+   .. py:method:: __getitem__(colName: str) -> ivcap_df.column.Column
+
+
+   .. py:method:: entity(**kwargs) -> ivcap_df.dataSet.DataItem
+
+
+   .. py:method:: stage_entities(df: pandas.DataFrame, mapper=None, indexF=None) -> pandas.Series
+
+      Create entities according to this schema for every row in 'df'
+
+      :param df: dataframe holding an entity in every row
+      :type df: DataFrame
+      :param mapper: An optional mapper frpm row to named property. Defaults to None.
+      :type mapper: _type_, optional
+      :param indexF: Optional property name which should be used as index for returned series. Defaults to None.
+      :type indexF: _type_, optional
+
+      :raises Exception: If no mapper was found for a mandatory property
+
+      :returns: A series containing the respective DataItem for each row in 'df'
+      :rtype: Series
+
+
+   .. py:method:: is_valid(df: pandas.DataFrame, verbose: Optional[bool] = False) -> bool
+
+
+   .. py:method:: is_equal(other: Schema) -> bool
+
+      Return True if 'other' is an identical schema definition
+
+
+   .. py:method:: column(name: str) -> ivcap_df.column.Column
+
+      Return the column instance for `name`
+
+      :param name: Name of column
+      :type name: str
+
+      :returns: instance of 'Column' or None if there is no column with that name
+      :rtype: Column
+
+
+   .. py:method:: property(name: str) -> ivcap_df.column.Column
+
+      Alias for 'column'
+
+
+   .. py:method:: persist(connector: ivcap_df.connector.Connector, onlyEntities=False, verbose=False)
+
+      Persist this schema as well as all staged entities
+
+      :param connector: Connector to persistence provider
+      :type connector: Connector
+      :param onlyEntities: If true do NOT persist schema definition. Defaults to True.
+      :type onlyEntities: bool, optional
+      :param verbose: Be chatty. Defaults to False.
+      :type verbose: bool, optional
+
+
+   .. py:method:: create_dataframe(data: Sequence[Sequence[Any]], columns: Optional[Sequence[str]] = None, indexF: Optional[Callable[[Sequence[Any]], str]] = None, addEntityColumn=False) -> pandas.DataFrame
+
+      Creates and returns a dataframe with columns set according to this schema.
+
+      :param data: A sequence of rows to insert into the dataframe
+      :type data: Sequence[Sequence[Any]]
+      :param columns: An optional list of column names if `data` is not ordered according to schema order
+      :type columns: Optional[Sequence[str]], optional
+      :param indexF: If defined, this function, given the row sequencem should return the index for this row.
+      :type indexF: Optional[Callable[[Sequence[Any]], str]], optional
+      :param addEntityColumn: If true, add an `entity` column which combines the urn of this schema with the row's index (or `indexF`). Defaults to False.
+      :type addEntityColumn: bool, optional
+
+      :raises Exception: If `columns` contains a columns name which is not an attribute of this schema
+
+      :returns: a dataframe with columns as defined by this schema and content as defined by `data`
+      :rtype: DataFrame
+
+
+   .. py:method:: persist_dataframe(connector: ivcap_df.connector.Connector, df: pandas.DataFrame, indexF: Optional[Callable[[Sequence[Any]], str]] = None, verbose=False) -> pandas.DataFrame
+
+
+   .. py:method:: dataset(connector: ivcap_df.connector.Connector = None) -> ivcap_df.dataSet.DataSet
+
+      Return all entities found for the references schema as a DataSet
+
+      :param connector: Connector to retrieve data from. Defaults to None.
+      :type connector: Connector, optional
+
+      :raises Exception: _description_
+
+      :returns: A dataset containing all elements found for the referenced schema
+      :rtype: DataSet
+
+
+   .. py:method:: get_current_dataset() -> ivcap_df.dataSet.DataSet
+
+      Return the dataset currently associated with this schema.
+
+          This dataset contains all the items previously fetched via `dataset` or
+          added one by one through `entity`.
+
+      :returns: A dataset containing all elements currently maintained by this schema instance
+      :rtype: DataSet
+
+
+   .. py:method:: query_one(query: str, local_dict: Dict[str, Any] = {}, failQuietly=False) -> ivcap_df.dataSet.DataItem
+
+      Try to find a single data item which is returned by `query`.
+
+      :param query: Query string as defined by panda's DataFrame#query
+      :type query: str
+      :param local_dict: Optionally maps '@' variables in `query` to values. Defaults to {}.
+      :type local_dict: Dict[str, Any], optional
+      :param failQuietly: If nothing found and set to true return None, otherwise raise exception. Defaults to False.
+      :type failQuietly: bool, optional
+
+      :raises Exception: If none or multiple entities are found and 'failQuietly' is set to False
+
+      :returns: DataItem found as result of query
+      :rtype: DataItem
+
+
+   .. py:method:: query(query: str, local_dict: Dict[str, Any] = {}) -> Sequence[ivcap_df.dataSet.DataItem]
+
+      Returns a sequence of DataItems which fulfill `query`.
+
+      :param query: Query string as defined by panda's DataFrame#query
+      :type query: str
+      :param local_dict: Optionally maps '@' variables in `query` to values. Defaults to {}.
+      :type local_dict: Dict[str, Any], optional
+
+      :returns: Sequence of data items contained in this set
+      :rtype: Sequence[DataItem]
+
+
+   .. py:method:: create_uuid(text) -> uuid.UUID
+
+
+   .. py:method:: create_entity_id(hashes: Sequence[str]) -> str
+
+
+   .. py:method:: create_entity_id_mapper(indexF: Optional[Callable[[Sequence[Any]], str]] = None) -> Callable[[Sequence[Any]], str]
+
+
+   .. py:method:: add_entity_id(df: pandas.DataFrame, indexF: Optional[Callable[[Sequence[Any]], str]] = None, inplace=False, override=False) -> pandas.DataFrame
+
+      Add an Column.ENTITY_COL_NAME column holding either the result of indexF or a UUIDv5 calculated over the content of the entire row
+
+
+   .. py:method:: to_json_schema(schema=DEF_SCHEMA)
+
+
+   .. py:method:: df_to_json(df)
+
+
+   .. py:method:: is_schema() -> bool
+
+      Primarily used by RefColumn to identify a Schema object without importing this class (circular dependency)
+
+
+   .. py:method:: graph(depth=99, digraph: Optional[graphviz.Digraph] = None, fontSize=12, verbose=False) -> graphviz.Digraph
+
+      Return a Graphviz Digraph showing the dependency graph for all items currently known to this schema.
+
+      :param depth: Number of levels to expand to. Defaults to 99.
+      :type depth: int, optional
+      :param digraph: Digraph object. If set to None, one is being created. Defaults to None.
+      :type digraph: Optional[Digraph], optional
+      :param fontSize: Font size for node and edge label if digraph is created internally . Defaults to 12.
+      :type fontSize: int, optional
+      :param verbose: If set report on items visited. Defaults to False.
+      :type verbose: bool, optional
+
+      :returns: The digraph nodes and edges have been added
+      :rtype: Digraph
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+.. py:data:: DEF_SCHEMA
+   :value: 'https://json-schema.org/draft/2019-09/hyper-schema'
+
+   
+
+.. py:class:: Column(name: str, ctype: ColType, **kwargs)
+
+
+   Defines the name and type of a schema column.
+
+   .. py:attribute:: name
+      :type: str
+
+      
+
+   .. py:attribute:: ctype
+      :type: ColType
+
+      
+
+   .. py:attribute:: description
+      :type: str
+
+      
+
+   .. py:attribute:: default
+      :type: Any
+
+      
+
+   .. py:attribute:: required
+      :type: bool
+
+      
+
+   .. py:method:: from_dict(name: str, definition: Dict[str, Any], required=True) -> Column
+      :classmethod:
+
+
+   .. py:method:: is_nullable() -> bool
+
+
+   .. py:method:: def_value()
+
+
+   .. py:method:: is_valid(series: pandas.Series) -> bool
+
+      Check if pandas 'series'is approriate for this column's defined 'ctype'
+
+
+   .. py:method:: is_equal(other: Column) -> bool
+
+
+   .. py:method:: to_json_schema()
+
+
+   .. py:method:: hash_value(v: Any) -> str
+
+      Returns a string representation of 'v' for use in entity hash
+
+      :param v: column value
+      :type v: Any
+
+      :returns: A string to be used in creating an entity ID
+      :rtype: str
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+.. py:class:: IdColumn
+
+
+   Bases: :py:obj:`Column`
+
+   Defines the name and type of a schema column.
+
+   .. py:method:: is_nullable()
+
+
+   .. py:method:: is_equal(other: Column) -> bool
+
+
+   .. py:method:: to_json_schema()
+
+
+   .. py:method:: get_urn_for(ref: str) -> str
+
+      Returns the urn of the reference 'ref' assuming to be a value of this column type.
+
+      :param v: column value
+      :type v: Any
+
+      :returns: The URN of referenced entity
+      :rtype: str
+
+
+   .. py:method:: hash_value(v: Any) -> str
+
+      Returns a string representation of 'v' for use in entity hash
+
+      :param v: column value
+      :type v: Any
+
+      :returns: An empty string as the IdColumn should not be part of the entity hash
+      :rtype: str
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+.. py:class:: RefColumn(name: str, schema_or_urn: Optional[Union[ivcap_df.schema.Schema, str]] = ANY_SCHEMA, **kwargs)
+
+
+   Bases: :py:obj:`Column`
+
+   Defines the name and type of a schema column.
+
+   .. py:attribute:: _schema
+      :type: Schema
+
+      
+
+   .. py:attribute:: urn
+      :type: str
+
+      
+
+   .. py:method:: from_dict(name: str, definition: Dict[str, Any], required=True) -> RefColumn
+      :classmethod:
+
+
+   .. py:method:: is_equal(other: Column) -> bool
+
+
+   .. py:method:: schema_name() -> str
+
+
+   .. py:method:: schema(connector: ivcap_df.connector.Connector = None) -> Schema
+
+
+   .. py:method:: dataset(connector: ivcap_df.connector.Connector = None) -> DataSet
+
+      Return all entities found for the references schema as a DataSet
+
+      :param connector: Connector to retrieve data from. Defaults to None.
+      :type connector: Connector, optional
+
+      :raises Exception: _description_
+
+      :returns: A dataset containing all elements found for the referenced schema
+      :rtype: DataSet
+
+
+   .. py:method:: to_json_schema()
+
+
+   .. py:method:: get_urn_for(ref: Union[DataSet, str]) -> str
+
+      Returns the urn of the reference 'ref' assuming to be a value of this column type.
+
+
+
+      :param v: column value
+      :type v: Any
+
+      :returns: The URN of referenced entity
+      :rtype: str
+
+
+   .. py:method:: hash_value(v: Any) -> str
+
+      Returns a string representation of 'v' for use in entity hash
+
+      :param v: column value
+      :type v: Any
+
+      :returns: The URN of referenced entity
+      :rtype: str
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+.. py:class:: ColType
+
+
+   Bases: :py:obj:`enum.Enum`
+
+   Generic enumeration.
+
+   Derive from this class to define new enumerations.
+
+   .. py:attribute:: ENTITY
+      :value: 'entity'
+
+      
+
+   .. py:attribute:: UUID
+      :value: 'uuid'
+
+      
+
+   .. py:attribute:: REF
+      :value: 'ref'
+
+      
+
+   .. py:attribute:: FLOAT16
+      :value: 'float16'
+
+      
+
+   .. py:attribute:: FLOAT32
+      :value: 'float32'
+
+      
+
+   .. py:attribute:: FLOAT64
+      :value: 'float64'
+
+      
+
+   .. py:attribute:: INT8
+      :value: 'int8'
+
+      
+
+   .. py:attribute:: INT16
+      :value: 'int16'
+
+      
+
+   .. py:attribute:: INT32
+      :value: 'int32'
+
+      
+
+   .. py:attribute:: INT64
+      :value: 'int64'
+
+      
+
+   .. py:attribute:: UINT8
+      :value: 'uint8'
+
+      
+
+   .. py:attribute:: UINT16
+      :value: 'uint16'
+
+      
+
+   .. py:attribute:: UINT32
+      :value: 'uint32'
+
+      
+
+   .. py:attribute:: UINT64
+      :value: 'uint64'
+
+      
+
+   .. py:attribute:: DATETIME64_NS_TZ
+      :value: 'datetime_tz'
+
+      
+
+   .. py:attribute:: DATE
+      :value: 'date'
+
+      
+
+   .. py:attribute:: STRING
+      :value: 'string'
+
+      
+
+   .. py:attribute:: BOOLEAN
+      :value: 'boolean'
+
+      
+
+
+.. py:data:: ENTITY_COL_NAME
+   :value: '_id'
+
+   
+
+.. py:class:: Connector
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+   .. py:method:: close()
+      :abstractmethod:
+
+
+   .. py:method:: insert_data_frame(df: pandas.DataFrame, schema: ivcap_df.schema.Schema, ignoreDuplicateRecords=True)
+      :abstractmethod:
+
+      Insert content of 'df' into table represented by 'schema'. If 'ignoreDuplicateRecords'
+      is set, quietly drop any records in 'df' which have an identical 'record-id' to what is already
+      stored in the table.
+
+
+   .. py:method:: get_all_for_schema(schema: ivcap_df.schema.Schema) -> pandas.DataFrame
+      :abstractmethod:
+
+      Get all accessible entities of type `Schema`.
+
+      This query is primarily used for schemas representing 'controlled vocabulary'.
+
+      :param schema: Schema of elements queried.
+      :type schema: Schema
+
+      :returns: A dataframe holding all accessible entities
+      :rtype: pd.DataFrame
+
+
+   .. py:method:: query_to_df(query: str) -> pandas.DataFrame
+      :abstractmethod:
+
+      Execute 'query' (connector specific) and return result as dataframe.
+
+
+   .. py:method:: register_schema(schema: ivcap_df.schema.Schema, failQuietly=False, verbose=False)
+      :abstractmethod:
+
+      Register the 'schema' in the metadata registry.
+
+
+   .. py:method:: get_schema(name: str, verbose=False) -> ivcap_df.schema.Schema
+      :abstractmethod:
+
+
+   .. py:method:: get_all_schemas_for_namespace(name: str, verbose=False) -> Sequence[ivcap_df.schema.Schema]
+      :abstractmethod:
+
+
+   .. py:method:: upload_artifact(*, name: Optional[str] = None, file_path: Optional[str] = None, io_stream: Optional[IO] = None, content_type: Optional[str] = None, content_size: Optional[int] = -1, chunk_size: Optional[int] = MAXSIZE, retries: Optional[int] = 0, retry_delay: Optional[int] = 30) -> ivcap_client.Artifact
+      :abstractmethod:
+
+      Uploads content which is either identified as a `file_path` or `io_stream`. In the
+      latter case, content type need to be provided.
+
+      :param file_path: File to upload
+      :type file_path: Optional[str]
+      :param io_stream: Content as IO stream.
+      :type io_stream: Optional[IO]
+      :param content_type: Content type - needs to be declared for `io_stream`.
+      :type content_type: Optional[str]
+      :param content_size: Overall size of content to be uploaded. Defaults to -1 (don't know).
+      :type content_size: Optional[int]
+      :param chunk_size: Chunk size to use for each individual upload. Defaults to MAXSIZE.
+      :type chunk_size: Optional[int]
+      :param retries: The number of attempts should be made in the case of a failed upload. Defaults to 0.
+      :type retries: Optional[int]
+      :param retry_delay: How long (in seconds) should we wait before retrying a failed upload attempt. Defaults to 30.
+      :type retry_delay: Optional[int], optional
+
+
+
+.. py:function:: create_connector(**kwargs) -> Connector
+
+
+.. py:class:: DataSet(schema: ivcap_df.schema.Schema, labelF: Optional[Callable[[Dict[str, Any]], str]] = None, dataFrame: pandas.DataFrame = None)
+
+
+   .. py:attribute:: schema
+      :type: ivcap_df.schema.Schema
+
+      
+
+   .. py:attribute:: items
+      :type: Dict[str, DataItem]
+
+      
+
+   .. py:attribute:: df
+      :type: pandas.DataFrame
+
+      
+
+   .. py:method:: add(**kwargs) -> DataItem
+
+
+   .. py:method:: add_df(df: pandas.DataFrame) -> Dict[str, DataItem]
+
+
+   .. py:method:: add_data_items(items: pandas.Series[DataItem])
+
+
+   .. py:method:: query_one(query: str, local_dict: Dict[str, Any] = {}, failQuietly=False) -> DataItem
+
+      Try to find a single data item which is returned by `query`.
+
+      :param query: Query string as defined by panda's DataFrame#query.
+      :type query: str
+      :param local_dict: Optionally maps '@' variables in `query` to values. Defaults to {}.
+      :type local_dict: Dict[str, Any], optional
+      :param failQuietly: If nothing found and set to true return None, otherwise raise exception. Defaults to False.
+      :type failQuietly: bool, optional
+
+      :raises Exception: If none or multiple entities are found and 'failQuietly' is set to False
+
+      :returns: DataItem found as result of query
+      :rtype: DataItem
+
+
+   .. py:method:: query(query: str, local_dict: Dict[str, Any] = {}) -> Sequence[DataItem]
+
+      Returns a sequence pf DataItems which fulfill `query`.
+
+      :param query: Query string as defined by panda's DataFrame#query
+      :type query: str
+      :param local_dict: Optionally maps '@' variables in `query` to values. Defaults to {}.
+      :type local_dict: Dict[str, Any], optional
+
+      :returns: Sequence of data items contained in this set
+      :rtype: Sequence[DataItem]
+
+
+   .. py:method:: isempty()
+
+
+   .. py:method:: graph(depth=99, digraph: Optional[graphviz.Digraph] = None, fontSize=12, verbose=False) -> graphviz.Digraph
+
+      Return a Graphviz Digraph showing the dependency graph for all items in this set.
+
+      :param depth: Number of levels to expand to. Defaults to 99.
+      :type depth: int, optional
+      :param digraph: Digraph object. If set to None, one is being created. Defaults to None.
+      :type digraph: Optional[Digraph], optional
+      :param fontSize: Font size for node and edge label if digraph is created internally . Defaults to 12.
+      :type fontSize: int, optional
+      :param verbose: If set report on items visited. Defaults to False.
+      :type verbose: bool, optional
+
+      :returns: The digraph nodes and edges have been added
+      :rtype: Digraph
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+.. py:class:: DataItem(id: str, data: Sequence[Any], schema: ivcap_df.schema.Schema)
+
+
+   .. py:attribute:: id
+      :type: str
+
+      
+
+   .. py:attribute:: schema
+      :type: ivcap_df.schema.Schema
+
+      
+
+   .. py:attribute:: _data
+      :type: Sequence[Any]
+
+      
+
+   .. py:method:: graph_many(*seedItems: Sequence[DataItem], depth=99, digraph: Optional[graphviz.Digraph] = None, fontSize=12, verbose=False) -> graphviz.Digraph
+      :classmethod:
+
+      Return a Graphviz Digraph showing the dependency graph for items in `*seedItems`.
+
+      :param depth: Number of levels to expand to. Defaults to 99.
+      :type depth: int, optional
+      :param digraph: Digraph object. If set to None, one is being created. Defaults to None.
+      :type digraph: Optional[Digraph], optional
+      :param fontSize: Font size for node and edge label if digraph is created internally . Defaults to 12.
+      :type fontSize: int, optional
+      :param verbose: If set report on items visited. Defaults to False.
+      :type verbose: bool, optional
+
+      :returns: The digraph nodes and edges have been added
+      :rtype: Digraph
+
+
+   .. py:method:: prop(name: str) -> Any
+
+
+   .. py:method:: props() -> Sequence[Tuple[str, Any, ivcap_df.column.ColType]]
+
+      Return a sequence of tuples (propName, propValue, colType) one for each property
+
+      :returns: A sequence of tuples (propName, propValue, colType)
+      :rtype: Sequence[Tuple[str, Any, ColType]]
+
+
+   .. py:method:: graph(depth=99, digraph: Optional[graphviz.Digraph] = None, fontSize=12, verbose=False) -> graphviz.Digraph
+
+      Return a Graphviz Digraph showing the dependency graph for this item.
+
+      :param depth: Number of levels to expand to. Defaults to 99.
+      :type depth: int, optional
+      :param digraph: Digraph object. If set to None, one is being created. Defaults to None.
+      :type digraph: Optional[Digraph], optional
+      :param fontSize: Font size for node and edge label if digraph is created internally . Defaults to 12.
+      :type fontSize: int, optional
+      :param verbose: If set report on items visited. Defaults to False.
+      :type verbose: bool, optional
+
+      :returns: The digraph nodes and edges have been added
+      :rtype: Digraph
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+   .. py:method:: __hash__()
+
+      Return hash(self).
+
+
+
+.. py:exception:: NotAuthorizedException
+
+
+   Bases: :py:obj:`BaseException`
+
+   Common base class for all exceptions
+
+
