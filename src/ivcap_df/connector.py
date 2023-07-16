@@ -122,6 +122,10 @@ class Connector(ABC):
         """
         pass
 
+    @abstractmethod 
+    def __enter__(self) -> 'Connector':
+        pass
+
 def create_connector(**kwargs) -> Connector:
     type = kwargs.get('type')
     if not type:
