@@ -65,13 +65,14 @@ class Connector(ABC):
         pass
     
     @abstractmethod
-    def get_all_for_schema(self, schema: Schema) -> pd.DataFrame:
+    def get_all_for_schema(self, schema: Schema, entity: Optional[str]) -> pd.DataFrame:
         """Get all accessible entities of type `Schema`.
         
         This query is primarily used for schemas representing 'controlled vocabulary'.
 
         Args:
             schema (Schema): Schema of elements queried.
+            entity (URN): If set, restrict to records for this entity 
 
         Returns:
             pd.DataFrame: A dataframe holding all accessible entities

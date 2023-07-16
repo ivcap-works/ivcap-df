@@ -183,7 +183,7 @@ class IvcapConnector(Connector):
         schema = Schema.from_dict(m[0].aspect)
         return schema
     
-    def get_all_for_schema(self, schema: Schema, debug:bool = False) -> pd.DataFrame:
+    def get_all_for_schema(self, schema: Schema, entity: Optional[str] = None, debug:bool = False) -> pd.DataFrame:
         """Get all accessible entities of type `Schema`.
         
         This query is primarily used for schemas representing 'controlled vocabulary'.
@@ -211,7 +211,7 @@ class IvcapConnector(Connector):
 
             return row
         
-        rows = list(map(m, self._ivcap.search_metadata(schema_prefix=schema.urn)))
+        rows = list(map(m, self._ivcap.search_metadata(schema_prefix=schema.urn, entity=entity)))
         df = pd.DataFrame(rows, columns=cnames)
         return df
 
