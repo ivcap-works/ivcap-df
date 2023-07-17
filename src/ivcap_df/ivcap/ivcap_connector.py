@@ -88,8 +88,10 @@ class IvcapConnector(Connector):
                     try:
                         el = str(el.to_datetime64()) if not pd.isnull(el) else None
                     except Exception as ex:
-                        raise Exception(f"Column '{col.name}' doesn't contain datetime value - '{ex}'")
-
+                        if isinstance(el, datetime):
+                            el = el.isoformat()
+                        else:
+                            raise Exception(f"Column '{col.name}' doesn't contain datetime value - '{ex}'")
                     
                 if el == None or pd.isna(el):
                     continue
@@ -183,13 +185,22 @@ class IvcapConnector(Connector):
         schema = Schema.from_dict(m[0].aspect)
         return schema
     
-    def get_all_for_schema(self, schema: Schema, entity: Optional[str] = None, debug:bool = False) -> pd.DataFrame:
+    def get_all_for_schema(self, 
+                           schema: Schema, 
+                           *, 
+                           entity: Optional[str]=None,
+                           filter: Optional[str]=None,
+                           at_time: Optional[datetime]=None,
+    ) -> pd.DataFrame:
         """Get all accessible entities of type `Schema`.
         
         This query is primarily used for schemas representing 'controlled vocabulary'.
 
         Args:
             schema (Schema): Schema of elements queried.
+            entity (URN): If set, restrict to records for this entity 
+            filter (str): If set, additionally restrict to records passing this filter,
+            at_time(datetime): Return records 'known' at that time
 
         Returns:
             pd.DataFrame: A dataframe holding all accessible entities
@@ -211,7 +222,9 @@ class IvcapConnector(Connector):
 
             return row
         
-        rows = list(map(m, self._ivcap.search_metadata(schema_prefix=schema.urn, entity=entity)))
+        rows = list(map(m, self._ivcap.search_metadata(
+            schema_prefix=schema.urn, entity=entity,
+            filter=filter, at_time=at_time)))
         df = pd.DataFrame(rows, columns=cnames)
         return df
 
