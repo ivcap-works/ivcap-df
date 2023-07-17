@@ -827,6 +827,21 @@ added one by one through <cite>entity</cite>.</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_df.ColType.URN">
+<span class="sig-name descname"><span class="pre">URN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'urn'</span></em><a class="headerlink" href="#ivcap_df.ColType.URN" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_df.ColType.URI">
+<span class="sig-name descname"><span class="pre">URI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'uri'</span></em><a class="headerlink" href="#ivcap_df.ColType.URI" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_df.ColType.ARTIFACT">
+<span class="sig-name descname"><span class="pre">ARTIFACT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'artifact'</span></em><a class="headerlink" href="#ivcap_df.ColType.ARTIFACT" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="ivcap_df.ColType.REF">
 <span class="sig-name descname"><span class="pre">REF</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ref'</span></em><a class="headerlink" href="#ivcap_df.ColType.REF" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
@@ -926,20 +941,25 @@ inheritance.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ivcap_df.Connector.insert_data_frame">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">insert_data_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="schema/index.html#ivcap_df.schema.Schema" title="ivcap_df.schema.Schema"><span class="pre">ivcap_df.schema.Schema</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignoreDuplicateRecords</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ivcap_df/connector.html#Connector.insert_data_frame"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_df.Connector.insert_data_frame" title="Permalink to this definition"></a></dt>
-<dd><p>Insert content of ‘df’ into table represented by ‘schema’. If ‘ignoreDuplicateRecords’
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">insert_data_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="schema/index.html#ivcap_df.schema.Schema" title="ivcap_df.schema.Schema"><span class="pre">ivcap_df.schema.Schema</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_duplicate_records</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ivcap_df/connector.html#Connector.insert_data_frame"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_df.Connector.insert_data_frame" title="Permalink to this definition"></a></dt>
+<dd><p>Insert content of ‘df’ into table represented by ‘schema’. If ‘ignore_duplicate_records’
 is set, quietly drop any records in ‘df’ which have an identical ‘record-id’ to what is already
 stored in the table.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ivcap_df.Connector.get_all_for_schema">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_all_for_schema</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="schema/index.html#ivcap_df.schema.Schema" title="ivcap_df.schema.Schema"><span class="pre">ivcap_df.schema.Schema</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="reference internal" href="../../_modules/ivcap_df/connector.html#Connector.get_all_for_schema"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_df.Connector.get_all_for_schema" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_all_for_schema</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="schema/index.html#ivcap_df.schema.Schema" title="ivcap_df.schema.Schema"><span class="pre">ivcap_df.schema.Schema</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime.datetime</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="reference internal" href="../../_modules/ivcap_df/connector.html#Connector.get_all_for_schema"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_df.Connector.get_all_for_schema" title="Permalink to this definition"></a></dt>
 <dd><p>Get all accessible entities of type <cite>Schema</cite>.</p>
 <p>This query is primarily used for schemas representing ‘controlled vocabulary’.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>schema</strong> (<a class="reference internal" href="#ivcap_df.Schema" title="ivcap_df.Schema"><em>Schema</em></a>) – Schema of elements queried.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>schema</strong> (<a class="reference internal" href="#ivcap_df.Schema" title="ivcap_df.Schema"><em>Schema</em></a>) – Schema of elements queried.</p></li>
+<li><p><strong>entity</strong> (<em>URN</em>) – If set, restrict to records for this entity</p></li>
+<li><p><strong>filter</strong> (<em>str</em>) – If set, additionally restrict to records passing this filter,</p></li>
+<li><p><strong>at_time</strong> (<em>datetime</em>) – Return records ‘known’ at that time</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A dataframe holding all accessible entities</p>
@@ -991,6 +1011,11 @@ latter case, content type need to be provided.</p>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivcap_df.Connector.__enter__">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">__enter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ivcap_df.Connector" title="ivcap_df.Connector"><span class="pre">Connector</span></a></span></span><a class="reference internal" href="../../_modules/ivcap_df/connector.html#Connector.__enter__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_df.Connector.__enter__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 

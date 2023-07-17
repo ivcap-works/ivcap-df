@@ -562,6 +562,21 @@ Attributes
 
       
 
+   .. py:attribute:: URN
+      :value: 'urn'
+
+      
+
+   .. py:attribute:: URI
+      :value: 'uri'
+
+      
+
+   .. py:attribute:: ARTIFACT
+      :value: 'artifact'
+
+      
+
    .. py:attribute:: REF
       :value: 'ref'
 
@@ -660,15 +675,15 @@ Attributes
       :abstractmethod:
 
 
-   .. py:method:: insert_data_frame(df: pandas.DataFrame, schema: ivcap_df.schema.Schema, ignoreDuplicateRecords=True)
+   .. py:method:: insert_data_frame(df: pandas.DataFrame, schema: ivcap_df.schema.Schema, ignore_duplicate_records=True)
       :abstractmethod:
 
-      Insert content of 'df' into table represented by 'schema'. If 'ignoreDuplicateRecords'
+      Insert content of 'df' into table represented by 'schema'. If 'ignore_duplicate_records'
       is set, quietly drop any records in 'df' which have an identical 'record-id' to what is already
       stored in the table.
 
 
-   .. py:method:: get_all_for_schema(schema: ivcap_df.schema.Schema) -> pandas.DataFrame
+   .. py:method:: get_all_for_schema(schema: ivcap_df.schema.Schema, *, entity: Optional[str], filter: Optional[str], at_time: Optional[datetime.datetime]) -> pandas.DataFrame
       :abstractmethod:
 
       Get all accessible entities of type `Schema`.
@@ -677,6 +692,12 @@ Attributes
 
       :param schema: Schema of elements queried.
       :type schema: Schema
+      :param entity: If set, restrict to records for this entity
+      :type entity: URN
+      :param filter: If set, additionally restrict to records passing this filter,
+      :type filter: str
+      :param at_time: Return records 'known' at that time
+      :type at_time: datetime
 
       :returns: A dataframe holding all accessible entities
       :rtype: pd.DataFrame
@@ -722,6 +743,10 @@ Attributes
       :type retries: Optional[int]
       :param retry_delay: How long (in seconds) should we wait before retrying a failed upload attempt. Defaults to 30.
       :type retry_delay: Optional[int], optional
+
+
+   .. py:method:: __enter__() -> Connector
+      :abstractmethod:
 
 
 

@@ -125,10 +125,13 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#ivcap_df.column.validate_urn" title="ivcap_df.column.validate_urn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate_urn</span></code></a>(→ bool)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#ivcap_df.column.create_uuid" title="ivcap_df.column.create_uuid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_uuid</span></code></a>(→ uuid.UUID)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ivcap_df.column.validate_artifact" title="ivcap_df.column.validate_artifact"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate_artifact</span></code></a>(→ bool)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#ivcap_df.column.safe_sql_name" title="ivcap_df.column.safe_sql_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">safe_sql_name</span></code></a>(name)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#ivcap_df.column.create_uuid" title="ivcap_df.column.create_uuid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_uuid</span></code></a>(→ uuid.UUID)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ivcap_df.column.safe_sql_name" title="ivcap_df.column.safe_sql_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">safe_sql_name</span></code></a>(name)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -190,6 +193,21 @@
 <dl class="py attribute">
 <dt class="sig sig-object py" id="ivcap_df.column.ColType.UUID">
 <span class="sig-name descname"><span class="pre">UUID</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'uuid'</span></em><a class="headerlink" href="#ivcap_df.column.ColType.UUID" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_df.column.ColType.URN">
+<span class="sig-name descname"><span class="pre">URN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'urn'</span></em><a class="headerlink" href="#ivcap_df.column.ColType.URN" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_df.column.ColType.URI">
+<span class="sig-name descname"><span class="pre">URI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'uri'</span></em><a class="headerlink" href="#ivcap_df.column.ColType.URI" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_df.column.ColType.ARTIFACT">
+<span class="sig-name descname"><span class="pre">ARTIFACT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'artifact'</span></em><a class="headerlink" href="#ivcap_df.column.ColType.ARTIFACT" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -292,6 +310,11 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="ivcap_df.column.validate_urn">
 <span class="sig-prename descclassname"><span class="pre">ivcap_df.column.</span></span><span class="sig-name descname"><span class="pre">validate_urn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">e</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../../_modules/ivcap_df/column.html#validate_urn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_df.column.validate_urn" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ivcap_df.column.validate_artifact">
+<span class="sig-prename descclassname"><span class="pre">ivcap_df.column.</span></span><span class="sig-name descname"><span class="pre">validate_artifact</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">e</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../../_modules/ivcap_df/column.html#validate_artifact"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_df.column.validate_artifact" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py data">
