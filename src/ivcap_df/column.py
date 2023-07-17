@@ -25,6 +25,9 @@ ANY_SCHEMA = 'urn:ivcap:schema:any.1'
 class ColType(Enum):
     ENTITY = 'entity'
     UUID = 'uuid'
+    URN = 'urn'
+    URI = 'uri'
+    ARTIFACT = 'artifact'
     REF = 'ref'
     FLOAT16 = 'float16'
     FLOAT32 = 'float32'
@@ -49,6 +52,9 @@ JsonSchemaType = {
     # ColType.ENTITY: lambda c: {"type": "string", "description": "The unique identifier for this record",},    
     # ColType.UUID: lambda c: {"type": "string", "format": "uuid"},
     # ColType.REF: lambda c: {"type": "string", "format": "uri", "stype": "ref"},
+    ColType.URN: lambda c: {"type": "string", "format": "uri"},
+    ColType.URI: lambda c: {"type": "string", "format": "uri"},
+    ColType.ARTIFACT: lambda c: {"type": "string", "format": "uri"},
     ColType.FLOAT16: lambda c: {"type": "number" },
     ColType.FLOAT32: lambda c: {"type": "number" },
     ColType.FLOAT64: lambda c: {"type": "number" },
@@ -81,9 +87,17 @@ def validate_urn(e) -> bool:
         return False
     return e.startswith('urn:')
 
+def validate_artifact(e) -> bool:
+    if not isinstance(e, str):
+        return False
+    return e.startswith('urn:ivcap:artifact')
+
 seriesValidator = {
     ColType.ENTITY: lambda s: next(filter(validate_urn, s), None) is None,
     ColType.UUID: lambda s: next(filter(validate_uuid, s), None) is None,
+    ColType.URN: lambda s: next(filter(validate_urn, s), None) is None,
+    ColType.URI: is_string_dtype, # TODO: Make more specific
+    ColType.ARTIFACT: lambda s: next(filter(validate_artifact, s), None) is None,
     ColType.REF: lambda s: next(filter(validate_urn, s), None) is None,
     ColType.FLOAT16: lambda s: s.dtype == np.float16 or s.dtype.name == 'float16',
     ColType.FLOAT32: lambda s: s.dtype == np.float32 or s.dtype.name == 'float32',
@@ -105,6 +119,9 @@ seriesValidator = {
 pandaTypes = {
     ColType.ENTITY: np.dtype('U'),
     ColType.UUID: np.dtype('U'),
+    ColType.URN: np.dtype('U'),
+    ColType.URI: np.dtype('U'),
+    ColType.ARTIFACT: np.dtype('U'),
     ColType.REF: np.dtype('U'),
     ColType.FLOAT16: np.dtype('f2'),
     ColType.FLOAT32: np.dtype('f4'),
