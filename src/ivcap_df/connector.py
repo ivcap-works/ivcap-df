@@ -65,13 +65,14 @@ class Connector(ABC):
         pass
     
     @abstractmethod
-    def get_all_for_schema(self, schema: Schema) -> pd.DataFrame:
+    def get_all_for_schema(self, schema: Schema, entity: Optional[str]) -> pd.DataFrame:
         """Get all accessible entities of type `Schema`.
         
         This query is primarily used for schemas representing 'controlled vocabulary'.
 
         Args:
             schema (Schema): Schema of elements queried.
+            entity (URN): If set, restrict to records for this entity 
 
         Returns:
             pd.DataFrame: A dataframe holding all accessible entities
@@ -120,6 +121,10 @@ class Connector(ABC):
             retries (Optional[int]): The number of attempts should be made in the case of a failed upload. Defaults to 0.
             retry_delay (Optional[int], optional): How long (in seconds) should we wait before retrying a failed upload attempt. Defaults to 30.
         """
+        pass
+
+    @abstractmethod 
+    def __enter__(self) -> 'Connector':
         pass
 
 def create_connector(**kwargs) -> Connector:
