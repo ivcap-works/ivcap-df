@@ -10,14 +10,14 @@ if TYPE_CHECKING:
 
 import pandas as pd
 from abc import ABC, abstractmethod
+from datetime import datetime
+from sys import maxsize as MAXSIZE
 
 from ivcap_client import Artifact
-from sys import maxsize as MAXSIZE
 
 def _create_ivcap_connector(**kwargs):
     from .ivcap import IvcapConnector
     return IvcapConnector(**kwargs)
-    #return IvcapConnector
 
 def _create_cozo_connector(**kwargs):
     from .cozo import CozoConnector
@@ -58,14 +58,20 @@ class Connector(ABC):
         pass
 
     @abstractmethod
-    def insert_data_frame(self, df: pd.DataFrame, schema: Schema, ignoreDuplicateRecords = True):
-        """Insert content of 'df' into table represented by 'schema'. If 'ignoreDuplicateRecords'
+    def insert_data_frame(self, df: pd.DataFrame, schema: Schema, ignore_duplicate_records = True):
+        """Insert content of 'df' into table represented by 'schema'. If 'ignore_duplicate_records'
         is set, quietly drop any records in 'df' which have an identical 'record-id' to what is already
         stored in the table."""
         pass
     
     @abstractmethod
-    def get_all_for_schema(self, schema: Schema, entity: Optional[str]) -> pd.DataFrame:
+    def get_all_for_schema(self, 
+                           schema: Schema, 
+                           *, 
+                           entity: Optional[str],
+                           filter: Optional[str],
+                           at_time: Optional[datetime],
+    ) -> pd.DataFrame:
         """Get all accessible entities of type `Schema`.
         
         This query is primarily used for schemas representing 'controlled vocabulary'.
@@ -73,6 +79,8 @@ class Connector(ABC):
         Args:
             schema (Schema): Schema of elements queried.
             entity (URN): If set, restrict to records for this entity 
+            filter (str): If set, additionally restrict to records passing this filter,
+            at_time(datetime): Return records 'known' at that time
 
         Returns:
             pd.DataFrame: A dataframe holding all accessible entities
