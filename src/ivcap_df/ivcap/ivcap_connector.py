@@ -83,7 +83,10 @@ class IvcapConnector(Connector):
                 if col.ctype == ColType.UUID:
                     el = str(el) if isinstance(el, uuid.UUID) else None
                 elif col.ctype == ColType.REF:
-                    el = el if not pd.isnull(el) else "urn:error:undefined"
+                    if not pd.isnull(el):
+                        pass # already in the right format
+                    else:
+                        el = "urn:error:undefined" if col.required else None
                 elif col.ctype == ColType.DATETIME64_NS_TZ:
                     try:
                         el = str(el.to_datetime64()) if not pd.isnull(el) else None
@@ -91,7 +94,10 @@ class IvcapConnector(Connector):
                         if isinstance(el, datetime):
                             el = el.isoformat()
                         else:
-                            raise Exception(f"Column '{col.name}' doesn't contain datetime value - '{ex}'")
+                            if isinstance(el, str):
+                                pass # ok, already a string. TODO: Maybe we should check if string is properly formatted
+                            else:
+                                raise Exception(f"Column '{col.name}' doesn't contain datetime value - '{ex}'")
                     
                 if el == None or pd.isna(el):
                     continue
