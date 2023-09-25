@@ -8,6 +8,7 @@ from typing import IO, TYPE_CHECKING, Optional, Sequence
 if TYPE_CHECKING:
     from .schema import Schema
 
+import os
 import pandas as pd
 from abc import ABC, abstractmethod
 from datetime import datetime
@@ -40,18 +41,18 @@ class Connector(ABC):
             obj = super().__new__(cls)
             return obj
 
-        type = kwargs.get('type')
-        if not type:
+        ctype = kwargs.get('type', os.getenv('IVCAP_TYPE', 'ivcap'))
+        if not ctype:
             raise Exception(f"Missing 'type' declaration for connector - {kwargs}")
-        klass = type2klass.get(type)
+        klass = type2klass.get(ctype)
         if not klass:
-            raise Exception(f"Unsupported connector type {type} - [{', '.join(list(type2klass.keys()))}]")
+            raise Exception(f"Unsupported connector type {ctype} - [{', '.join(list(type2klass.keys()))}]")
         try:
             kwargs['__recursive__'] = True
             obj = klass(**kwargs)
             return obj
         except Exception as e:
-            raise Exception(f"Failed to create connector of type {type} - {e}")
+            raise Exception(f"Failed to create connector of type {ctype} - {e}")
      
     @abstractmethod
     def close(self):

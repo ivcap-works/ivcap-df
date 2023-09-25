@@ -154,7 +154,12 @@ class Schema:
 
         def add_schema(schema, colors):
             def short_gname(name):
-                return name.split(':')[2][len('schema:'):]
+                pa = name.split(':')
+                if len(pa) > 3:
+                    return name.split(':')[3]
+                else: 
+                    print(f"Misformatted urn '{pa}'")
+                    return "???"
 
             attr = []
             refs = []
