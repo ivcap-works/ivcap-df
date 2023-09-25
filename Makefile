@@ -9,6 +9,10 @@ ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 build: add-license
 	poetry build
 
+# https://www.digitalocean.com/community/tutorials/how-to-publish-python-packages-to-pypi-using-poetry-on-ubuntu-22-04
+publish: build
+	poetry publish
+
 test:
 	poetry run pytest tests/ --cov=ivcap_df --cov-report=xml
 
