@@ -5,30 +5,22 @@
 #
 import pandas as pd
 import pandas.io.sql as sqlio
-import numpy as np
-import time 
 import os
-import re
-from functools import reduce
 import uuid
 from sys import maxsize as MAXSIZE
 
-from urllib.parse import quote 
 from datetime import datetime
-from dateutil.parser import parse
 
-from typing import IO, Any, Dict, Iterable, Callable, List, Optional, Sequence, Tuple
+from typing import IO, Any, Dict, Optional, Sequence
 from ivcap_df.connector import Connector
 
 from ivcap_df.schema import SUPPORTED_SCHEMAS
-from ..types import NotAuthorizedException
 
 from ivcap_client import IVCAP, Metadata, Artifact
 
 import os
-import json
 
-from ivcap_df import Schema, ColType, Column, RefColumn, IdColumn, ENTITY_COL_NAME
+from ivcap_df import Schema, ColType, ENTITY_COL_NAME
 
 class IvcapConnector(Connector):
 
