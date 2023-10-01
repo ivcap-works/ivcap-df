@@ -6,3 +6,6 @@
 
 class NotAuthorizedException(BaseException):
     pass
+
+# Should be made more specific, same as ivcap-client-sdk
+URN = str

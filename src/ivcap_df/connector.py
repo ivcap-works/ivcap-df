@@ -5,6 +5,8 @@
 #
 from __future__ import annotations ## needs to come first
 from typing import IO, TYPE_CHECKING, Optional, Sequence
+
+from ivcap_df.types import URN
 if TYPE_CHECKING:
     from .schema import Schema
 
@@ -59,7 +61,13 @@ class Connector(ABC):
         pass
 
     @abstractmethod
-    def insert_data_frame(self, df: pd.DataFrame, schema: Schema, ignore_duplicate_records = True):
+    def insert_data_frame(self, 
+                          df: pd.DataFrame, 
+                          schema: Schema, 
+                          policy: Optional[URN] = None,
+                          ignore_duplicate_records: Optional[bool] = True,
+                          verbose: Optional[bool] = False,
+                          ):
         """Insert content of 'df' into table represented by 'schema'. If 'ignore_duplicate_records'
         is set, quietly drop any records in 'df' which have an identical 'record-id' to what is already
         stored in the table."""
@@ -94,8 +102,19 @@ class Connector(ABC):
         pass
 
     @abstractmethod
-    def register_schema(self, schema: Schema, failQuietly = False, verbose=False):
-        """Register the 'schema' in the metadata registry."""
+    def register_schema(self, 
+                        schema: Schema, 
+                        policy: Optional[URN] = None,
+                        fail_quietly: Optional[bool] = False, 
+                        verbose: Optional[bool] = False):
+        """Register the 'schema' in the metadata registry.
+
+        Args:
+            schema (Schema): Schema to be registered.
+            entity (URN): Policy governing access 
+            fail_quietly (bool): If set, don't throw exception if call fails
+            verbose(bool): Be verbose when set
+        """
         pass
 
     @abstractmethod

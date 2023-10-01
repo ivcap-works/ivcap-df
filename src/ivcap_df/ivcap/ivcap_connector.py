@@ -21,6 +21,7 @@ from ivcap_client import IVCAP, Metadata, Artifact
 import os
 
 from ivcap_df import Schema, ColType, ENTITY_COL_NAME
+from ivcap_df.types import URN
 
 class IvcapConnector(Connector):
 
@@ -104,8 +105,13 @@ class IvcapConnector(Connector):
         md = self._ivcap.add_metadata(**mr)
         return md.urn
     
-    def insert_data_frame(self, df: pd.DataFrame, schema: Schema, ignoreDuplicateRecords = True, verbose=False):
-        """Insert content of 'df' into table represented by 'schema'. If 'ignoreDuplicateRecords'
+    def insert_data_frame(self, 
+                          df: pd.DataFrame, 
+                          schema: Schema, 
+                          policy: Optional[URN] = None,
+                          ignore_duplicate_records: Optional[bool] = True,
+                          verbose=False):
+        """Insert content of 'df' into table represented by 'schema'. If 'ignore_duplicate_records'
         is set, quietly drop any records in 'df' which have an identical 'record-id' to what is already
         stored in the table."""
 
@@ -140,7 +146,8 @@ class IvcapConnector(Connector):
             return {
                 "entity": r[ENTITY_COL_NAME],
                 "schema": schema.urn,
-                "aspect": rec
+                "aspect": rec,
+                "policy": policy
             }
 
         records = df.apply(f, axis=1)
@@ -164,12 +171,12 @@ class IvcapConnector(Connector):
         return dfx
 
             
-    def register_schema(self, schema: Schema, failQuietly = False, verbose=False):
+    def register_schema(self, schema: Schema, policy = None,fail_quietly = False, verbose=False):
         """Register the 'schema' in the metadata registry."""
         try:
-            self._ivcap.add_metadata(entity=schema.urn, aspect=schema.to_json_schema())
+            self._ivcap.add_metadata(entity=schema.urn, aspect=schema.to_json_schema(), policy=policy)
         except Exception as exec:
-            if not failQuietly:
+            if not fail_quietly:
                 raise exec 
 
     def get_schema(self, name: str, verbose=False) -> Schema:
