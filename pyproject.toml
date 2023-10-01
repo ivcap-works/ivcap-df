@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ivcap_df"
-version = "0.3.3"
+version = "0.4.0"
 description = "Library to model, search, and work with linked data in IVCAP"
 authors = ["Max Ott <max.ott@csiro.au>"]
 license = "BSD-3"
