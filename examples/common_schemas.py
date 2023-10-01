@@ -43,13 +43,13 @@ schemas = {
     'in_collection': collection_membership_s,
 }
 
-print(Schema.to_dot(schemas.values(), fontSize=10))
+#print(Schema.to_dot(schemas.values(), fontSize=10))
 
 ivcap_params = {"type": "ivcap"}
 with Connector(**ivcap_params) as conn:
     for name, schema in schemas.items():
         print(name)
-        schema.persist(conn, verbose=True)
+        schema.persist(conn, policy="urn:ivcap:policy:ivcap.open.metadata", verbose=True)
 print("...schema done")
 
  

@@ -13,6 +13,8 @@ from functools import reduce
 import re
 from graphviz import Digraph
 
+from .types import URN
+
 from .column import Column, IdColumn, ColType, NAMESPACE_IVCAP, ENTITY_COL_NAME
 from .connector import Connector
 from .dataSet import DataSet, DataItem
@@ -385,18 +387,22 @@ class Schema:
         """Alias for 'column'"""
         return self.column(name)
     
-    def persist(self, connector: Connector, onlyEntities=False, verbose=False):
+    def persist(self, 
+                connector: Connector, 
+                only_entities: Optional[bool] = False, 
+                policy: Optional[URN] = None,
+                verbose: Optional[bool] = False):
         """Persist this schema as well as all staged entities
 
         Args:
             connector (Connector): Connector to persistence provider
-            onlyEntities (bool, optional): If true do NOT persist schema definition. Defaults to True.
+            only_entities (bool, optional): If true do NOT persist schema definition. Defaults to True.
             verbose (bool, optional): Be chatty. Defaults to False.
         """
-        if not onlyEntities:
-            connector.register_schema(self, verbose=verbose)
+        if not only_entities:
+            connector.register_schema(self, policy=policy, verbose=verbose)
         if not self._ds.isempty():
-            self.persist_dataframe(connector, self._ds.df, verbose=verbose)
+            self.persist_dataframe(connector, self._ds.df, policy=policy, verbose=verbose)
 
     def create_dataframe(self,
                          data: Sequence[Sequence[Any]], 
@@ -444,12 +450,13 @@ class Schema:
     def persist_dataframe(self, 
         connector: Connector,
         df: DataFrame, 
-        indexF: Optional[Callable[[Sequence[Any]], str]] = None,
-        verbose=False,
+        index_f: Optional[Callable[[Sequence[Any]], str]] = None,
+        policy: Optional[URN] = None,
+        verbose: Optional[bool] =False,
     ) -> DataFrame:
-        if indexF != None or not ENTITY_COL_NAME in df.columns:
-            df = self.add_entity_id(df, indexF, True)
-        connector.insert_data_frame(df, self, verbose=verbose)
+        if index_f != None or ENTITY_COL_NAME not in df.columns:
+            df = self.add_entity_id(df, index_f, True)
+        connector.insert_data_frame(df, self, policy=policy, verbose=verbose)
         return df
     
     def dataset(self, connector: Connector = None) -> 'DataSet':
